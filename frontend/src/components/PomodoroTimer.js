@@ -1,27 +1,41 @@
 // frontend/src/components/PomodoroTimer.js
-import React, { useState, useEffect } from 'react';
-import { Button, ProgressBar } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, ProgressBar, Modal } from 'react-bootstrap';
 
 const PomodoroTimer = () => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes
+  const initialTime = 25 * 60; // 25 minutes
+  const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isActive, setIsActive] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    let interval;
     if (isActive && timeLeft > 0) {
-      interval = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
-    } else if (timeLeft === 0) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft(prev => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0 && isActive) {
       setIsActive(false);
-      alert('Time is up!');
+      setShowModal(true);
     }
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalRef.current);
   }, [isActive, timeLeft]);
 
-  const startTimer = () => setIsActive(true);
-  const pauseTimer = () => setIsActive(false);
+  const startTimer = () => {
+    if (timeLeft > 0) {
+      setIsActive(true);
+    }
+  };
+
+  const pauseTimer = () => {
+    setIsActive(false);
+    clearInterval(intervalRef.current);
+  };
+
   const resetTimer = () => {
     setIsActive(false);
-    setTimeLeft(25 * 60);
+    clearInterval(intervalRef.current);
+    setTimeLeft(initialTime);
   };
 
   const formatTime = (time) => {
@@ -30,17 +44,30 @@ const PomodoroTimer = () => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    resetTimer();
+  };
+
   return (
     <div className="container mt-4 text-center">
       <h2 className="mb-3">Pomodoro Timer</h2>
       <h3>{formatTime(timeLeft)}</h3>
       <ProgressBar
-        now={(timeLeft / (25 * 60)) * 100}
-        label={`${Math.floor((timeLeft / (25 * 60)) * 100)}%`}
+        now={(timeLeft / initialTime) * 100}
+        label={`${Math.floor((timeLeft / initialTime) * 100)}%`}
         className="mb-3"
+        animated={isActive}
+        variant={
+          timeLeft > initialTime * 0.5
+            ? "success"
+            : timeLeft > initialTime * 0.2
+            ? "warning"
+            : "danger"
+        }
       />
-      <div>
-        <Button variant="success" onClick={startTimer} disabled={isActive}>
+      <div className="mb-3">
+        <Button variant="success" onClick={startTimer} disabled={isActive || timeLeft === 0}>
           Start
         </Button>{' '}
         <Button variant="warning" onClick={pauseTimer} disabled={!isActive}>
@@ -50,6 +77,21 @@ const PomodoroTimer = () => {
           Reset
         </Button>
       </div>
+
+      {/* Modal for notifying when time is up */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Time's Up!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Your Pomodoro session has ended. Take a short break and then get back to work!
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
