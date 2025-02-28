@@ -1,0 +1,185 @@
+/* Smooth Fade-In Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Background Animation */
+@keyframes backgroundFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2c3e50, #34495e, #7f8c8d, #2c3e50);
+    background-size: 600% 600%;
+    animation: backgroundFlow 15s ease infinite alternate;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden; /* Prevent scrollbars during animations */
+}
+
+/* Notes Card */
+.card {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px); /* Increased blur for a softer look */
+    border-radius: 24px; /* Rounded corners for modern aesthetics */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    margin-top: 20px;
+}
+
+/* Hover Effect */
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Notes Title */
+h2, h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+    letter-spacing: 1px; /* Improved readability */
+}
+
+/* Textarea */
+textarea {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 14px; /* Slightly larger radius for better UI */
+    background: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 180px;
+    line-height: 1.6;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    outline: none;
+    backdrop-filter: blur(8px); /* Enhanced blur effect */
+}
+
+/* Textarea Focus */
+textarea:focus {
+    border-color: #00a8ff;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 25px rgba(0, 168, 255, 0.6);
+    transform: scale(1.01);
+}
+
+/* Button */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+button {
+    background: linear-gradient(90deg, #00a8ff, #0052d4);
+    border: none;
+    padding: 16px 35px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    color: #ffffff;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    animation: pulse 2s infinite alternate;
+    box-shadow: 0 6px 20px rgba(0, 168, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Button Hover */
+button:hover {
+    background: linear-gradient(90deg, #0052d4, #00a8ff);
+    transform: scale(1.04);
+    box-shadow: 0 8px 30px rgba(0, 168, 255, 0.7);
+}
+
+/* Saved Notes */
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    width: 100%;
+}
+
+li {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    color: #ffffff;
+    animation: fadeIn 0.5s ease-in-out;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover Effect for List Items */
+li:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        padding: 25px;
+    }
+    h2, h4 {
+        font-size: 1.8rem;
+    }
+    textarea {
+        font-size: 1rem;
+    }
+    button {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    .card {
+        width: 100%;
+        padding: 20px;
+    }
+    h2, h4 {
+        font-size: 1.6rem;
+    }
+    textarea {
+        font-size: 0.9rem;
+        min-height: 150px;
+    }
+    button {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+}
